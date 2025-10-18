@@ -3,7 +3,7 @@ export class PolygonProp {
   /** 多边形边线颜色 */
   color: string = "#0000FF";
   /** 多边形边线的宽度，以像素为单位 */
-  weight: number = 3;
+  weight: number = 2;
   /** 多边形边线的透明度（范围 0-1 之间） */
   opacity: number = 0.2;
   /** 多边形填充颜色当参数为空时，折线覆盖物将没有填充效果  */

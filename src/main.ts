@@ -1,17 +1,19 @@
 import { createApp } from "vue";
 import "./style.css";
 import App from "./App.vue";
+import store from "./stores/index";
 
 import VueTianditu from "vue-tianditu";
 import "vue-tianditu/lib/style.css";
-
 import { tTk } from "./utils/tmap-utils";
 
 const app = createApp(App);
 
+app.use(store);
+
 app.use(VueTianditu, {
   v: "4.0", //目前只支持4.0版本
-  tk: tTk
+  tk: tTk,
 });
 
 app.mount("#app");

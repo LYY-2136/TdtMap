@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { getAdministrative } from "@/api/tdtAPI";
 import { parse } from "terraformer-wkt-parser";
 import { type DirectGeometryObject } from "geojson";
+import { PolygonProp } from "@/class/tdt-props";
+import { useBoundaryStore } from "@/stores/boundaryStore";
+
+import { GeoJsonToPolygonProps } from "@/utils/boundaryUtils";
+
+const boundaryStore = useBoundaryStore();
 
 /** 当前显示地图位置信息 */
 const mapState = reactive({
@@ -11,15 +17,7 @@ const mapState = reactive({
 });
 
 /** 当前绘制的多边形信息 */
-const polygonState = ref<any[]>([
-  {
-    color: "black",
-    opacity: 1,
-    edit: false,
-    visible: true,
-    path: [],
-  },
-]);
+const polygonState = ref<PolygonProp[]>([]);
 
 function searchComplete(result: T.LocalSearchResult) {
   console.log("#1", result);
@@ -68,22 +66,38 @@ async function drawBoundary(name: string) {
     console.log("边界数据:", multiPolygon);
     if (multiPolygon.type != "GeometryCollection") {
       const coordinates = (multiPolygon as DirectGeometryObject)
-        .coordinates as number[][][];
+        .coordinates as number[][][][];
       console.log("数据", polygonState.value);
       for (let ploygonArr of coordinates) {
         for (let path of ploygonArr) {
-          polygonState.value.push({
-            color: "black",
-            opacity: 1,
-            edit: false,
-            visible: true,
-            path,
-          });
+          polygonState.value.push(
+            new PolygonProp({
+              color: "black",
+              opacity: 1,
+              edit: false,
+              visible: true,
+              path,
+            })
+          );
         }
       }
     }
   }
 }
+
+onMounted(async () => {
+  const data = await boundaryStore.getProvinceData();
+  polygonState.value.length = 0;
+  console.log(
+    GeoJsonToPolygonProps(data, {
+      color: "red",
+      fillColor: "yellow",
+      opacity: 0.2,
+      edit: false,
+      visible: true,
+    }).map((item) => item.path)
+  );
+});
 </script>
 
 <template>
