@@ -24,14 +24,17 @@ function parseGeoJSONToTdt<
 
     switch (geometry.type) {
       case "Point": // 点
-        console.log("注意：处理的点");
+        console.warn("[GeoJSON转化] => 点类型暂不支持转换");
         break;
 
       case "MultiPoint": // 多点
+        console.warn("[GeoJSON转化] => 多点类型暂不支持转换");
         break;
 
       case "LineString": // 线
-        components.push(convertLineStringToTdt(geometry, properties));
+        components.push(
+          convertLineStringToTdt(geometry.coordinates, properties)
+        );
         break;
 
       case "MultiLineString": // 多线
@@ -63,6 +66,9 @@ function parseGeoJSONToTdt<
   return components;
 }
 
+/**  */
+export const convertLineStringToTdt = () => {};
+
 /** GeoJSON转为可用的多边形组件可用数据
  * @param geoJsonData GeoJSON数据
  * @param options 自定义的多边形属性
@@ -92,4 +98,5 @@ export const GeoJsonToPolygonProps = (
   return polygons;
 };
 
-/**  */
+/** 边界组件 */
+export interface BoundaryComponent {}

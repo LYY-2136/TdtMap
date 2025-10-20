@@ -1,3 +1,31 @@
+/** 天地图-折现组件 */
+export class PolylineProp {
+  /** 折线颜色 */
+  color: string = "#0000FF";
+  /** 折线的宽度，以像素为单位 */
+  weight: number = 2;
+  /** 折线的透明度（范围 0-1 之间） */
+  opacity: number = 0.2;
+  /** 折线的样式（solid 或 dashed） */
+  lineStyle: string = "solid";
+  /** 坐标数组 */
+  path: number[][] = [];
+  /** 是否可编辑 */
+  edit: boolean = false;
+  /** 是否可见 */
+  visible: boolean = true;
+  /** 自定义属性 */
+  extData: any = null;
+
+  constructor(options: Partial<PolylineProp>) {
+    for (let key of Object.keys(options) as (keyof PolylineProp)[]) {
+      if (options[key] !== undefined) {
+        (this as any)[key] = options[key];
+      }
+    }
+  }
+}
+
 /** 天地图-多边形组件 */
 export class PolygonProp {
   /** 多边形边线颜色 */
